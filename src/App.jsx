@@ -8,6 +8,8 @@ import Sajek from "./components/Sajek"; // Create or import this component
 import Booking from './assets/Pages/Booking';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PopularDestinations from "./components/PopularDestinations";
+import FeaturedHotels from "./components/FeaturedHotels";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
         <Route path="/sundarban" element={<Sundarban />} />
         <Route path="/sajek" element={<Sajek />} />
         <Route path="/booking/:location/:destination" element={<Booking />} />
+        <Route path="/popular-destinations" element={<PopularDestinations />} />
+        <Route path="/featured-hotels" element={<FeaturedHotels />} />
       </Routes>
       <ToastContainer 
         position="top-right"
