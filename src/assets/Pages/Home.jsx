@@ -6,7 +6,8 @@ import FeaturedHotels from "../../components/FeaturedHotels";
 import WhyChooseUs from "../../components/WhyChooseUs";
 import Testimonials from "../../components/Testimonials";
 import Newsletter from "../../components/Newsletter";
-
+import Blog from '../../assets/Pages/Blog';
+import Contact from '../../assets/Pages/Contact';
 const Home = () => {
   return (
     <main>
@@ -15,8 +16,10 @@ const Home = () => {
       <PopularDestinations />
       <FeaturedHotels />
       <WhyChooseUs />
+      <Blog />
       <Testimonials />
       <Newsletter />
+      <Contact />
     </main>
   );
 };
