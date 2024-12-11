@@ -87,7 +87,7 @@ const Carousel = () => {
 
   const handleBooking = (path) => {
     if (!user) {
-      navigate("/login");
+      navigate("/register");
     } else {
       navigate(path);
     }
