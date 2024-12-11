@@ -18,7 +18,6 @@ const Home = () => {
       <WhyChooseUs />
       <Blog />
       <Testimonials />
-      <Newsletter />
       <Contact />
     </main>
   );
