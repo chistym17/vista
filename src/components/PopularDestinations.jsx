@@ -1,5 +1,6 @@
 import React from 'react'
 import { FaMapMarkerAlt, FaStar, FaRegClock } from 'react-icons/fa'
+import { Link } from 'react-router-dom';
 
 export default function PopularDestinations() {
   const destinations = [
@@ -104,9 +105,12 @@ export default function PopularDestinations() {
                   </div>
                 </div>
 
-                <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold flex items-center justify-center">
+                <Link 
+                  to={`/destination/${destination.id}`}
+                  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold flex items-center justify-center"
+                >
                   Explore More
-                </button>
+                </Link>
               </div>
             </div>
           ))}

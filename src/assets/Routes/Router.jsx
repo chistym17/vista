@@ -13,7 +13,7 @@ import Destinations from "../Pages/Destination"; // Import the Destinations comp
 import Blog from "../Pages/Blog"; // Import Blog component
 import Contact from "../Pages/Contact"; // Import Contact component
 import Booking from '../Pages/Booking';
-
+import DestinationDetails from "../Pages/DestinationDetails";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -66,6 +66,10 @@ const router = createBrowserRouter([
       {
         path: "/booking/:location/:destination",
         element: <Booking />,
+      },
+      {
+        path: "/destination/:id",
+        element: <DestinationDetails />,
       },
     ],
   },
