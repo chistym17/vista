@@ -14,6 +14,7 @@ import Blog from "../Pages/Blog"; // Import Blog component
 import Contact from "../Pages/Contact"; // Import Contact component
 import Booking from '../Pages/Booking';
 import DestinationDetails from "../Pages/DestinationDetails";
+import HotelDetails from "../Pages/HotelDetails"; 
 const router = createBrowserRouter([
   {
     path: "/",
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
       {
         path: "/destination/:id",
         element: <DestinationDetails />,
+      },
+      {
+        path: "/hotel/:id",
+        element: <HotelDetails />,
       },
     ],
   },

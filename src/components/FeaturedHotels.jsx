@@ -1,5 +1,6 @@
 // components/FeaturedHotels.jsx
 import { FaStar, FaWifi, FaParking, FaSwimmingPool, FaCoffee, FaMapMarkerAlt } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 export default function FeaturedHotels() {
   const hotels = [
@@ -63,7 +64,7 @@ export default function FeaturedHotels() {
           {hotels.map((hotel) => (
             <div
               key={hotel.id}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full"
             >
               <div className="relative">
                 <img
@@ -76,13 +77,16 @@ export default function FeaturedHotels() {
                 </div>
               </div>
 
-              <div className="p-6">
+              <div className="p-6 flex flex-col flex-grow">
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{hotel.name}</h3>
                 
                 <div className="flex items-center mb-2">
                   <div className="flex items-center text-yellow-400">
                     {[...Array(5)].map((_, i) => (
-                      <FaStar key={i} className={i < Math.floor(hotel.rating) ? 'text-yellow-400' : 'text-gray-300'} />
+                      <FaStar 
+                        key={i} 
+                        className={i < Math.floor(hotel.rating) ? 'text-yellow-400' : 'text-gray-300'} 
+                      />
                     ))}
                   </div>
                   <span className="ml-2 text-gray-600 text-sm">
@@ -90,37 +94,38 @@ export default function FeaturedHotels() {
                   </span>
                 </div>
 
-                <p className="text-gray-600 text-sm mb-4">{hotel.description}</p>
+                <p className="text-gray-600 text-sm mb-4 flex-grow">{hotel.description}</p>
 
-                <div className="flex items-center text-gray-500 text-sm mb-4">
-                  <FaMapMarkerAlt className="mr-1" />
-                  {hotel.location}
+                <div className="space-y-4">
+                  <div className="flex items-center text-gray-500 text-sm">
+                    <FaMapMarkerAlt className="mr-1" />
+                    {hotel.location}
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {hotel.amenities.map((amenity, index) => (
+                      <span
+                        key={index}
+                        className="bg-blue-50 text-blue-600 px-2 py-1 rounded-full text-xs font-medium"
+                      >
+                        {amenity}
+                      </span>
+                    ))}
+                  </div>
+
+                  <Link 
+                    to={`/hotel/${hotel.id}`}
+                    className="block w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 
+                      transition-colors font-semibold text-center mt-4"
+                  >
+                    View Details
+                  </Link>
                 </div>
-
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {hotel.amenities.map((amenity, index) => (
-                    <span
-                      key={index}
-                      className="bg-blue-50 text-blue-600 px-2 py-1 rounded-full text-xs font-medium"
-                    >
-                      {amenity}
-                    </span>
-                  ))}
-                </div>
-
-                <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors font-semibold">
-                  Book Now
-                </button>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="text-center mt-12">
-          <button className="bg-white text-blue-600 border-2 border-blue-600 px-8 py-3 rounded-full hover:bg-blue-50 transition-colors text-lg font-semibold">
-            View All Hotels
-          </button>
-        </div>
       </div>
     </section>
   );
