@@ -26,13 +26,7 @@ const Navbar = () => {
         {/* Logo */}
       </div>
       <div className="flex items-center space-x-4 lg:space-x-6">
-        <NavLink
-          to="/destinations"
-          className="text-white text-xs lg:text-sm"
-          activeClassName="font-bold"
-        >
-          Destinations
-        </NavLink>
+      
         <NavLink
           to="/blog"
           className="text-white text-xs lg:text-sm"
