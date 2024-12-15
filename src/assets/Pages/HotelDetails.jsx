@@ -1,6 +1,6 @@
 // src/Pages/HotelDetails.jsx
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FaStar, FaWifi, FaParking, FaSwimmingPool, FaCoffee, FaMapMarkerAlt, FaUtensils, FaGlassMartini, FaSpa, FaConciergeBell, FaUmbrella } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
@@ -353,28 +353,43 @@ const hotelsData = [
 export default function HotelDetails() {
   const { id } = useParams();
   const hotel = hotelsData.find(h => h.id === parseInt(id));
-  
+  const navigate = useNavigate();
+  // Get today's date and tomorrow's date for default values
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const formatDate = (date) => {
+    return date.toISOString().split('T')[0];
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const [bookingData, setBookingData] = useState({
-    checkIn: '',
-    checkOut: '',
+    checkIn: formatDate(today),
+    checkOut: formatDate(tomorrow),
     guests: 2,
-    roomType: '',
-    name: '',
-    email: '',
-    phone: ''
+    roomType: hotel?.rooms[0]?.type || '', // Default to first room type
+    name: 'John Doe', // Default name
+    email: 'john.doe@example.com', // Default email
+    phone: '+880 1700000000' // Default phone
   });
 
   const handleBooking = (e) => {
     e.preventDefault();
-    console.log('Booking Details:', {
-      hotel: hotel.name,
-      ...bookingData
+    const totalAmount = hotel.rooms.find(room => room.type === bookingData.roomType)?.price.replace('$', '') || '0';
+    
+    navigate('/payment', {
+      state: {
+        bookingDetails: {
+          hotelName: hotel.name,
+          ...bookingData,
+          totalAmount
+        }
+      }
     });
-    toast.success('Booking request sent successfully!');
   };
 
   if (!hotel) {

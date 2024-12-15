@@ -1,6 +1,6 @@
 // src/Pages/DestinationDetails.jsx
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FaMapMarkerAlt, FaStar, FaRegClock, FaUmbrella, FaCamera, FaHotel, FaPlane, FaCalendar, FaUsers } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
@@ -186,23 +186,48 @@ const destinationsData = [
 export default function DestinationDetails() {
   const { id } = useParams();
   const destination = destinationsData.find(d => d.id === parseInt(id));
+  const navigate = useNavigate();
   
+  // Get today's date and tomorrow's date for default values
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const formatDate = (date) => {
+    return date.toISOString().split('T')[0];
+  };
+
   const [bookingData, setBookingData] = useState({
-    name: '',
-    email: '',
-    date: '',
-    guests: 1,
-    package: 'budget'
+    name: 'John Doe', // Default name
+    email: 'john.doe@example.com', // Default email
+    phone: '+880 1700000000', // Default phone
+    date: formatDate(today),
+    guests: 2,
+    package: 'standard',
+    duration: '3 days'
   });
+
+  const packagePrices = {
+    budget: 199,
+    standard: 299,
+    luxury: 499
+  };
 
   const handleBooking = (e) => {
     e.preventDefault();
-    // Here you would typically send this to your backend
-    console.log('Booking Details:', {
-      destination: destination.name,
-      ...bookingData
+    const totalAmount = packagePrices[bookingData.package];
+    
+    navigate('/payment', {
+      state: {
+        bookingDetails: {
+          destinationName: destination.name,
+          ...bookingData,
+          totalAmount,
+          checkIn: bookingData.date,
+          checkOut: formatDate(new Date(new Date(bookingData.date).getTime() + (parseInt(bookingData.duration) * 24 * 60 * 60 * 1000))),
+        }
+      }
     });
-    toast.success('Booking request sent successfully!');
   };
 
   if (!destination) {
@@ -308,6 +333,7 @@ export default function DestinationDetails() {
                     className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
                     value={bookingData.name}
                     onChange={(e) => setBookingData({...bookingData, name: e.target.value})}
+                    placeholder="John Doe"
                   />
                 </div>
                 <div>
@@ -318,23 +344,50 @@ export default function DestinationDetails() {
                     className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
                     value={bookingData.email}
                     onChange={(e) => setBookingData({...bookingData, email: e.target.value})}
+                    placeholder="john.doe@example.com"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 mb-2">Travel Date</label>
+                  <label className="block text-gray-700 mb-2">Phone</label>
+                  <input
+                    type="tel"
+                    required
+                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
+                    value={bookingData.phone}
+                    onChange={(e) => setBookingData({...bookingData, phone: e.target.value})}
+                    placeholder="+880 1700000000"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 mb-2">Start Date</label>
                   <input
                     type="date"
                     required
+                    min={formatDate(today)}
                     className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
                     value={bookingData.date}
                     onChange={(e) => setBookingData({...bookingData, date: e.target.value})}
                   />
                 </div>
                 <div>
+                  <label className="block text-gray-700 mb-2">Duration</label>
+                  <select
+                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
+                    value={bookingData.duration}
+                    onChange={(e) => setBookingData({...bookingData, duration: e.target.value})}
+                  >
+                    <option value="3 days">3 Days</option>
+                    <option value="5 days">5 Days</option>
+                    <option value="7 days">7 Days</option>
+                    <option value="10 days">10 Days</option>
+                  </select>
+                </div>
+                <div>
                   <label className="block text-gray-700 mb-2">Number of Guests</label>
                   <input
                     type="number"
                     min="1"
+                    max="10"
                     required
                     className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
                     value={bookingData.guests}
@@ -348,9 +401,9 @@ export default function DestinationDetails() {
                     value={bookingData.package}
                     onChange={(e) => setBookingData({...bookingData, package: e.target.value})}
                   >
-                    <option value="budget">Budget Package</option>
-                    <option value="standard">Standard Package</option>
-                    <option value="luxury">Luxury Package</option>
+                    <option value="budget">Budget Package (${packagePrices.budget})</option>
+                    <option value="standard">Standard Package (${packagePrices.standard})</option>
+                    <option value="luxury">Luxury Package (${packagePrices.luxury})</option>
                   </select>
                 </div>
                 <button
@@ -358,7 +411,7 @@ export default function DestinationDetails() {
                   className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 
                     transition-colors font-semibold text-lg shadow-md hover:shadow-lg"
                 >
-                  Book Now
+                  Book Now - ${packagePrices[bookingData.package]}
                 </button>
               </form>
             </div>

@@ -15,6 +15,8 @@ import Contact from "../Pages/Contact"; // Import Contact component
 import Booking from '../Pages/Booking';
 import DestinationDetails from "../Pages/DestinationDetails";
 import HotelDetails from "../Pages/HotelDetails"; 
+import Payment from "../Pages/Payment";
+import BookingConfirmation from "../Pages/BookingConfirmation";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -75,6 +77,14 @@ const router = createBrowserRouter([
       {
         path: "/hotel/:id",
         element: <HotelDetails />,
+      },
+      {
+        path: "/payment",
+        element: <Payment />,
+      },
+      {
+        path: "/booking-confirmation",
+        element: <BookingConfirmation />,
       },
     ],
   },
