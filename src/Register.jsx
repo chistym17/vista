@@ -31,55 +31,55 @@ const Register = () => {
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center py-12 px-4 sm:px-6 lg:px-8"
       style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url(${bgImage})`,
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url(${bgImage})`,
       }}
     >
-      <div className="max-w-md w-full bg-white/90 backdrop-blur-md rounded-xl shadow-2xl p-8">
+      <div className="max-w-md w-full bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl p-10 transform hover:scale-[1.02] transition-all duration-300">
         <div className="text-center">
-          <h2 className="text-4xl font-bold text-gray-800 mb-6">
+          <h2 className="text-4xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Create Account
           </h2>
-          <p className="text-gray-600 mb-8">
-            Join us to start your journey
+          <p className="text-gray-600 mb-8 text-lg">
+            Join us to start your journey ✨
           </p>
         </div>
 
         <form onSubmit={handleRegister} className="space-y-6">
           {/* Name Input */}
-          <div>
+          <div className="group">
             <input
               type="text"
               name="name"
               placeholder="Full Name"
               required
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 outline-none hover:border-gray-300"
             />
           </div>
 
           {/* Email Input */}
-          <div>
+          <div className="group">
             <input
               type="email"
               name="email"
               placeholder="Email Address"
               required
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 outline-none hover:border-gray-300"
             />
           </div>
 
           {/* Password Input */}
-          <div className="relative">
+          <div className="relative group">
             <input
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Password"
               required
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 outline-none hover:border-gray-300"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
             >
               {showPassword ? <FaRegEyeSlash size={20} /> : <FaRegEye size={20} />}
             </button>
@@ -88,15 +88,15 @@ const Register = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3.5 rounded-xl hover:opacity-90 transition-all duration-300 font-semibold text-lg shadow-lg hover:shadow-blue-500/30 transform hover:translate-y-[-2px]"
           >
-            Sign Up
+            Create Account
           </button>
 
           {/* Login Link */}
-          <p className="text-center text-gray-600">
+          <p className="text-center text-gray-600 mt-6">
             Already have an account?{" "}
-            <Link to="/login" className="text-blue-600 hover:underline font-semibold">
+            <Link to="/login" className="text-blue-600 hover:text-purple-600 font-semibold transition-colors duration-300">
               Log In
             </Link>
           </p>

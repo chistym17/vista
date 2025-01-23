@@ -58,76 +58,91 @@ const LogIn = () => {
 
   return (
     <div
-      className="flex justify-center items-center min-h-screen bg-cover bg-center relative"
+      className="min-h-screen flex items-center justify-center bg-cover bg-center py-12 px-4 sm:px-6 lg:px-8"
       style={{
-        backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${bgImage})`,
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url(${bgImage})`,
       }}
     >
-      <Navbar />
-      <div className="flex flex-col bg-white bg-opacity-30 backdrop-filter backdrop-blur-lg p-10 rounded-lg shadow-lg w-full sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-lg border border-orange-300">
-        <h1 className="text-5xl font-bebo text-center mb-8 text-orange-600">
-          Log In
-        </h1>
-        <form onSubmit={handleLogIn} className="w-full font-mons">
-          <input
-            className="mb-6 p-3 w-full h-12 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-500"
-            type="email"
-            name="email"
-            ref={emailRef}
-            placeholder="Enter your email"
-            required
-          />
-          <div className="relative flex items-center">
+      <div className="max-w-md w-full bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl p-10 transform hover:scale-[1.02] transition-all duration-300">
+        <div className="text-center">
+          <h2 className="text-4xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
+            Welcome Back
+          </h2>
+          <p className="text-gray-600 mb-8 text-lg">
+            Sign in to your account 🔐
+          </p>
+        </div>
+
+        <form onSubmit={handleLogIn} className="space-y-6">
+          {/* Email Input */}
+          <div className="group">
             <input
-              className="p-3 w-full h-12 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-500 pr-12"
+              type="email"
+              name="email"
+              ref={emailRef}
+              placeholder="Email Address"
+              required
+              className="w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 transition-all duration-300 outline-none hover:border-gray-300"
+            />
+          </div>
+
+          {/* Password Input */}
+          <div className="relative group">
+            <input
               type={showPassword ? "text" : "password"}
               name="password"
-              placeholder="Enter your password"
+              placeholder="Password"
               required
+              className="w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 transition-all duration-300 outline-none hover:border-gray-300"
             />
-            <span
-              className="absolute right-3 cursor-pointer"
+            <button
+              type="button"
               onClick={() => setShowPassword(!showPassword)}
-              style={{ top: "50%", transform: "translateY(-50%)" }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
             >
-              {showPassword ? (
-                <FaRegEyeSlash size={20} />
-              ) : (
-                <FaRegEye size={20} />
-              )}
-            </span>
+              {showPassword ? <FaRegEyeSlash size={20} /> : <FaRegEye size={20} />}
+            </button>
           </div>
-          <div className="mt-3 text-center">
-            <a
-              href="#"
+
+          {/* Forgot Password Link */}
+          <div className="flex justify-end">
+            <button
               onClick={handleForgotPassword}
-              className="text-orange-600 hover:underline"
+              className="text-orange-600 hover:text-orange-700 text-sm font-semibold transition-colors duration-200"
             >
-              Forgot password?
-            </a>
+              Forgot your password?
+            </button>
           </div>
-          <input
-            className="w-full h-12 bg-orange-600 text-white font-semibold rounded-md hover:bg-orange-700 cursor-pointer transition duration-300 ease-in-out mt-6"
+
+          {/* Submit Button */}
+          <button
             type="submit"
-            value="Log In"
-          />
-          <div className="mt-4 text-center">
-            <a href="/register" className="text-orange-600 hover:underline">
-              Don't have an account? Register
+            className="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-3.5 rounded-xl hover:opacity-90 transition-all duration-300 font-semibold text-lg shadow-lg hover:shadow-orange-500/30 transform hover:translate-y-[-2px]"
+          >
+            Sign In
+          </button>
+
+          {/* Register Link */}
+          <p className="text-center text-gray-600 mt-6">
+            Don't have an account?{" "}
+            <a
+              href="/register"
+              className="text-orange-600 hover:text-red-600 font-semibold transition-colors duration-300"
+            >
+              Register
             </a>
-          </div>
+          </p>
         </form>
 
+        {/* Success Alert */}
         {success && (
-          <div
-            role="alert"
-            className="alert alert-success mt-4 p-4 bg-green-100 text-green-600 rounded-md"
-          >
+          <div className="mt-6 p-4 rounded-xl bg-green-50 border border-green-200 flex items-center gap-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 shrink-0 stroke-current inline mr-2"
+              className="h-5 w-5 text-green-500"
               fill="none"
               viewBox="0 0 24 24"
+              stroke="currentColor"
             >
               <path
                 strokeLinecap="round"
@@ -136,20 +151,19 @@ const LogIn = () => {
                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span>{success}</span>
+            <span className="text-green-700">{success}</span>
           </div>
         )}
 
+        {/* Error Alert */}
         {loginError && (
-          <div
-            role="alert"
-            className="mt-4 p-4 bg-red-100 text-red-600 rounded-md"
-          >
+          <div className="mt-6 p-4 rounded-xl bg-red-50 border border-red-200 flex items-center gap-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 shrink-0 stroke-current inline mr-2"
+              className="h-5 w-5 text-red-500"
               fill="none"
               viewBox="0 0 24 24"
+              stroke="currentColor"
             >
               <path
                 strokeLinecap="round"
@@ -158,7 +172,7 @@ const LogIn = () => {
                 d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span>{loginError}</span>
+            <span className="text-red-700">{loginError}</span>
           </div>
         )}
       </div>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaMapMarkerAlt, FaStar, FaRegClock } from 'react-icons/fa'
 import { Link } from 'react-router-dom';
+import { motion } from "framer-motion";
 
 export default function PopularDestinations() {
   const destinations = [
@@ -39,9 +40,20 @@ export default function PopularDestinations() {
     }
   ]
 
+  const cardVariants = {
+    initial: { scale: 0.9, opacity: 0 },
+    animate: { scale: 1, opacity: 1 },
+    hover: { scale: 1.05, transition: { duration: 0.2 } }
+  };
+
   return (
-    <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
-      <div className="container mx-auto px-4">
+    <section className="py-16 bg-gradient-to-b from-white to-gray-50">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="container mx-auto px-4"
+      >
         <h2 className="text-4xl font-bold text-center mb-4">
           Popular Destinations
         </h2>
@@ -49,11 +61,16 @@ export default function PopularDestinations() {
           Discover the most beautiful places in Bangladesh and create unforgettable memories
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {destinations.map((destination) => (
-            <div
+            <motion.div
               key={destination.id}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+              variants={cardVariants}
+              initial="initial"
+              whileInView="animate"
+              whileHover="hover"
+              viewport={{ once: true }}
+              className="bg-white rounded-xl shadow-lg overflow-hidden"
             >
               <div className="relative">
                 <img
@@ -112,12 +129,10 @@ export default function PopularDestinations() {
                   Explore More
                 </Link>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-
-     
-      </div>
+      </motion.div>
     </section>
   )
 }
