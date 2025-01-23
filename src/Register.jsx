@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import auth from "./assets/Firebase/firebase.config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -9,6 +9,7 @@ import bgImage from "../src/assets/images/registration.jpg";
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -20,10 +21,21 @@ const Register = () => {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       console.log(result.user);
       toast.success('Registration successful! Welcome aboard! 🎉');
-      navigate("/");
+      handleRegisterSuccess();
     } catch (error) {
       console.error(error);
       toast.error(error.message || 'Registration failed. Please try again.');
+    }
+  };
+
+  const handleRegisterSuccess = () => {
+    const redirectUrl = location.state?.redirectUrl;
+    const bookingDetails = location.state?.bookingDetails;
+    
+    if (redirectUrl && bookingDetails) {
+      navigate(redirectUrl, { state: { bookingDetails } });
+    } else {
+      navigate('/'); // or wherever you normally redirect after registration
     }
   };
 

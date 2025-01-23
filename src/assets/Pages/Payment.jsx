@@ -1,12 +1,14 @@
 // src/Pages/Payment.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaCreditCard, FaLock, FaRegClock } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { getAuth } from 'firebase/auth';
 
 export default function Payment() {
   const location = useLocation();
   const navigate = useNavigate();
+  const auth = getAuth();
   const bookingDetails = location.state?.bookingDetails;
 
   const [paymentDetails, setPaymentDetails] = useState({
@@ -17,6 +19,20 @@ export default function Payment() {
   });
 
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Check authentication status when component mounts
+  useEffect(() => {
+    if (!auth.currentUser) {
+      toast.error('Please login or register to complete your booking');
+      navigate('/register', { 
+        state: { 
+          redirectUrl: '/payment',
+          bookingDetails: bookingDetails 
+        }
+      });
+      return;
+    }
+  }, [auth.currentUser, navigate, bookingDetails]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
