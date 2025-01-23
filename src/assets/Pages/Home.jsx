@@ -58,7 +58,9 @@ const Home = () => {
           viewport={{ once: true }}
           whileInView="animate"
         >
-          <FeaturedHotels />
+          <section id="hotels" className="...">
+            <FeaturedHotels />
+          </section>
         </motion.div>
 
         <motion.div

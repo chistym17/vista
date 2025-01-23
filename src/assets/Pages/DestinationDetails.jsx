@@ -1,7 +1,7 @@
 // src/Pages/DestinationDetails.jsx
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaMapMarkerAlt, FaStar, FaRegClock, FaUmbrella, FaCamera, FaHotel, FaPlane, FaCalendar, FaUsers } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaStar, FaRegClock, FaUmbrella, FaCamera, FaHotel, FaPlane, FaCalendar, FaUsers, FaSun, FaCheckCircle, FaInfoCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const destinationsData = [
@@ -185,49 +185,25 @@ const destinationsData = [
 
 export default function DestinationDetails() {
   const { id } = useParams();
-  const destination = destinationsData.find(d => d.id === parseInt(id));
   const navigate = useNavigate();
-  
-  // Get today's date and tomorrow's date for default values
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  const destination = destinationsData.find(d => d.id === parseInt(id));
 
-  const formatDate = (date) => {
-    return date.toISOString().split('T')[0];
-  };
-
-  const [bookingData, setBookingData] = useState({
-    name: 'John Doe', // Default name
-    email: 'john.doe@example.com', // Default email
-    phone: '+880 1700000000', // Default phone
-    date: formatDate(today),
-    guests: 2,
-    package: 'standard',
-    duration: '3 days'
-  });
-
-  const packagePrices = {
-    budget: 199,
-    standard: 299,
-    luxury: 499
-  };
-
-  const handleBooking = (e) => {
-    e.preventDefault();
-    const totalAmount = packagePrices[bookingData.package];
-    
-    navigate('/payment', {
-      state: {
-        bookingDetails: {
-          destinationName: destination.name,
-          ...bookingData,
-          totalAmount,
-          checkIn: bookingData.date,
-          checkOut: formatDate(new Date(new Date(bookingData.date).getTime() + (parseInt(bookingData.duration) * 24 * 60 * 60 * 1000))),
-        }
+  const handleChooseDestination = () => {
+    // Navigate to home page with a hotels section hash
+    navigate('/#hotels', { 
+      state: { 
+        destinationId: destination.id,
+        scrollToHotels: true 
       }
     });
+    
+    // Add a small delay to ensure the navigation happens before scrolling
+    setTimeout(() => {
+      const hotelsSection = document.getElementById('hotels');
+      if (hotelsSection) {
+        hotelsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   if (!destination) {
@@ -276,9 +252,8 @@ export default function DestinationDetails() {
           ))}
         </div>
 
-        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column */}
+          {/* Left Column (2 spans) */}
           <div className="lg:col-span-2 space-y-8">
             {/* About Section */}
             <div className="bg-white rounded-xl shadow-md p-8 hover:shadow-lg transition-shadow">
@@ -321,112 +296,86 @@ export default function DestinationDetails() {
 
           {/* Right Column */}
           <div className="space-y-8">
-            {/* Booking Form */}
-            <div className="bg-white rounded-xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold mb-6">Book Your Trip</h2>
-              <form onSubmit={handleBooking} className="space-y-6">
-                <div>
-                  <label className="block text-gray-700 mb-2">Full Name</label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
-                    value={bookingData.name}
-                    onChange={(e) => setBookingData({...bookingData, name: e.target.value})}
-                    placeholder="John Doe"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 mb-2">Email</label>
-                  <input
-                    type="email"
-                    required
-                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
-                    value={bookingData.email}
-                    onChange={(e) => setBookingData({...bookingData, email: e.target.value})}
-                    placeholder="john.doe@example.com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 mb-2">Phone</label>
-                  <input
-                    type="tel"
-                    required
-                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
-                    value={bookingData.phone}
-                    onChange={(e) => setBookingData({...bookingData, phone: e.target.value})}
-                    placeholder="+880 1700000000"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 mb-2">Start Date</label>
-                  <input
-                    type="date"
-                    required
-                    min={formatDate(today)}
-                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
-                    value={bookingData.date}
-                    onChange={(e) => setBookingData({...bookingData, date: e.target.value})}
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 mb-2">Duration</label>
-                  <select
-                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
-                    value={bookingData.duration}
-                    onChange={(e) => setBookingData({...bookingData, duration: e.target.value})}
-                  >
-                    <option value="3 days">3 Days</option>
-                    <option value="5 days">5 Days</option>
-                    <option value="7 days">7 Days</option>
-                    <option value="10 days">10 Days</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-gray-700 mb-2">Number of Guests</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="10"
-                    required
-                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
-                    value={bookingData.guests}
-                    onChange={(e) => setBookingData({...bookingData, guests: e.target.value})}
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 mb-2">Package Type</label>
-                  <select
-                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
-                    value={bookingData.package}
-                    onChange={(e) => setBookingData({...bookingData, package: e.target.value})}
-                  >
-                    <option value="budget">Budget Package (${packagePrices.budget})</option>
-                    <option value="standard">Standard Package (${packagePrices.standard})</option>
-                    <option value="luxury">Luxury Package (${packagePrices.luxury})</option>
-                  </select>
+            {/* Choose Destination Card */}
+            <div className="bg-white rounded-xl shadow-lg p-8 sticky top-8">
+              <div className="text-center space-y-4">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Interested in {destination.name}?
+                </h2>
+                <p className="text-gray-600">
+                  Find and book the perfect hotel for your stay in this amazing destination
+                </p>
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <p className="text-blue-800 font-medium">
+                    Best time to visit: {destination.bestTimeToVisit}
+                  </p>
                 </div>
                 <button
-                  type="submit"
+                  onClick={handleChooseDestination}
                   className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 
-                    transition-colors font-semibold text-lg shadow-md hover:shadow-lg"
+                    transition-colors font-semibold text-lg shadow-md hover:shadow-lg
+                    flex items-center justify-center space-x-2"
                 >
-                  Book Now - ${packagePrices[bookingData.package]}
+                  <FaHotel />
+                  <span>Find Hotels</span>
                 </button>
-              </form>
-            </div>
+              </div>
 
-            {/* Travel Tips */}
-            <div className="bg-white rounded-xl shadow-md p-8 hover:shadow-lg transition-shadow">
-              <h2 className="text-2xl font-bold mb-4">Travel Tips</h2>
-              <ul className="space-y-3">
-                {destination.tips.map((tip, index) => (
-                  <li key={index} className="flex items-start space-x-3">
-                    <span className="text-blue-500 font-bold">•</span>
-                    <span className="text-gray-600">{tip}</span>
-                  </li>
-                ))}
-              </ul>
+              {/* Weather Information */}
+              <div className="mt-8 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg">
+                <h3 className="text-lg font-semibold mb-4 text-gray-800">
+                  Current Weather
+                </h3>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <FaSun className="text-yellow-500 text-3xl" />
+                    <div>
+                      <p className="text-2xl font-bold text-gray-800">28°C</p>
+                      <p className="text-sm text-gray-600">Sunny</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-600">Humidity: 65%</p>
+                    <p className="text-sm text-gray-600">Wind: 12 km/h</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Popular Activities */}
+              <div className="mt-8">
+                <h3 className="text-lg font-semibold mb-4 text-gray-800">
+                  Popular Activities
+                </h3>
+                <div className="space-y-3">
+                  {destination.activities.map((activity, index) => (
+                    <div 
+                      key={index}
+                      className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <FaCheckCircle className="text-green-500" />
+                      <span className="text-gray-700">{activity}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Travel Tips */}
+              <div className="mt-8">
+                <h3 className="text-lg font-semibold mb-4 text-gray-800">
+                  Essential Travel Tips
+                </h3>
+                <div className="space-y-3">
+                  {destination.tips.slice(0, 3).map((tip, index) => (
+                    <div 
+                      key={index}
+                      className="flex items-start space-x-3 p-3"
+                    >
+                      <FaInfoCircle className="text-blue-500 mt-1" />
+                      <span className="text-gray-600 text-sm">{tip}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
