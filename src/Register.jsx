@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import auth from "./assets/Firebase/firebase.config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { toast } from 'react-toastify';
 import bgImage from "../src/assets/images/registration.jpg";
 
@@ -19,6 +19,9 @@ const Register = () => {
 
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(result.user, {
+        displayName: name
+      });
       console.log(result.user);
       toast.success('Registration successful! Welcome aboard! 🎉');
       handleRegisterSuccess();

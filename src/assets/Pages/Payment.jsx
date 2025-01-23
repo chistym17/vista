@@ -10,6 +10,8 @@ export default function Payment() {
   const navigate = useNavigate();
   const auth = getAuth();
   const bookingDetails = location.state?.bookingDetails;
+  const [cardName, setCardName] = useState('');
+  const [cardEmail, setCardEmail] = useState('');
 
   const [paymentDetails, setPaymentDetails] = useState({
     cardNumber: '4242 4242 4242 4242',
@@ -20,7 +22,7 @@ export default function Payment() {
 
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Check authentication status when component mounts
+  // Check authentication and set user details
   useEffect(() => {
     if (!auth.currentUser) {
       toast.error('Please login or register to complete your booking');
@@ -32,6 +34,10 @@ export default function Payment() {
       });
       return;
     }
+
+    // Set the user's details from Firebase auth
+    setCardName(auth.currentUser.displayName || '');
+    setCardEmail(auth.currentUser.email || '');
   }, [auth.currentUser, navigate, bookingDetails]);
 
   const handleSubmit = (e) => {
@@ -69,7 +75,7 @@ export default function Payment() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           {/* Payment Header */}
@@ -117,6 +123,32 @@ export default function Payment() {
             <div className="bg-white p-6 rounded-xl shadow-md">
               <h2 className="text-xl font-bold mb-4 text-gray-800">Payment Details</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Name field */}
+                <div className="flex flex-col space-y-1">
+                  <label htmlFor="name" className="text-sm font-semibold text-gray-500">Card Holder Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    value={cardName}
+                    onChange={(e) => setCardName(e.target.value)}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                {/* Email field */}
+                <div className="flex flex-col space-y-1">
+                  <label htmlFor="email" className="text-sm font-semibold text-gray-500">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={cardEmail}
+                    onChange={(e) => setCardEmail(e.target.value)}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
                 <div>
                   <label className="block text-gray-700 mb-2">Card Number</label>
                   <div className="relative">
@@ -134,18 +166,6 @@ export default function Payment() {
                     />
                     <FaCreditCard className="absolute right-3 top-3 text-gray-400" />
                   </div>
-                </div>
-
-                <div>
-                  <label className="block text-gray-700 mb-2">Card Holder Name</label>
-                  <input
-                    type="text"
-                    placeholder="John Doe"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                    value={paymentDetails.cardHolder}
-                    onChange={(e) => setPaymentDetails({ ...paymentDetails, cardHolder: e.target.value })}
-                    required
-                  />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
