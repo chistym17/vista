@@ -22,7 +22,6 @@ export default function Payment() {
 
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Check authentication and set user details
   useEffect(() => {
     if (!auth.currentUser) {
       toast.error('Please login or register to complete your booking');
@@ -35,26 +34,60 @@ export default function Payment() {
       return;
     }
 
-    // Set the user's details from Firebase auth
     setCardName(auth.currentUser.displayName || '');
     setCardEmail(auth.currentUser.email || '');
   }, [auth.currentUser, navigate, bookingDetails]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsProcessing(true);
 
-    // Simulate payment processing
-    setTimeout(() => {
+    try {
+      const bookingData = {
+        destination: bookingDetails.destination,
+        checkIn: bookingDetails.rawCheckIn,
+        checkOut: bookingDetails.rawCheckOut,
+        guests: bookingDetails.guests,
+        roomType: bookingDetails.roomType,
+        contactInfo: {
+          name: bookingDetails.name,
+          email: bookingDetails.email,
+          phone: bookingDetails.phone
+        },
+        totalAmount: bookingDetails.totalAmount,
+        paymentStatus: 'completed'
+      };
+
+      const response = await fetch('http://localhost:8000/api/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bookingData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create booking');
+      }
+
+      const result = await response.json();
+      
       setIsProcessing(false);
       toast.success('Payment successful! Booking confirmed.');
+      
       navigate('/booking-confirmation', { 
         state: { 
-          bookingDetails,
-          paymentId: 'PAY-' + Math.random().toString(36).substr(2, 9).toUpperCase()
+          bookingDetails: {
+            ...bookingDetails,
+            bookingId: result.bookingId
+          }
         }
       });
-    }, 2000);
+    } catch (error) {
+      setIsProcessing(false);
+      console.error('Error:', error);
+      toast.error('Payment failed. Please try again.');
+    }
   };
 
   if (!bookingDetails) {
