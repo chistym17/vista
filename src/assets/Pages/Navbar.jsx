@@ -11,10 +11,8 @@ const Navbar = () => {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        // Handle successful logout
       })
       .catch((error) => {
-        // Handle error during logout
         console.error("Logout Error:", error);
       });
   };
