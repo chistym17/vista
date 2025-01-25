@@ -4,7 +4,7 @@ import logo from "../image.png";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../Firebase/firebase.config"; 
 import { signOut } from "firebase/auth";
-import { FaUser, FaSignOutAlt, FaRegBell } from 'react-icons/fa';
+import { FaUser, FaSignOutAlt, FaRegBell, FaCalendarAlt } from 'react-icons/fa';
 
 const Navbar = () => {
   const [user] = useAuthState(auth);
@@ -91,6 +91,13 @@ const Navbar = () => {
                     <FaRegBell className="mr-3 text-gray-500" />
                     Notifications
                   </a>
+                  <NavLink
+                    to="/my-bookings"
+                    className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-150"
+                  >
+                    <FaCalendarAlt className="mr-3 text-gray-500" />
+                    My Bookings
+                  </NavLink>
                   <button
                     onClick={handleLogout}
                     className="flex items-center w-full px-4 py-2 text-sm text-red-400 hover:bg-gray-800 hover:text-red-300 transition-colors duration-150"

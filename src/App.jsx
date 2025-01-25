@@ -1,15 +1,16 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Carousel from "./components/Carousel"; // Assuming Carousel is in the components folder
-import CoxsBazar from "./components/CoxsBazar"; // Create or import this component
-import Shreemangal from "./components/Shreemangal"; // Create or import this component
-import Sundarban from "./components/Sundarban"; // Create or import this component
-import Sajek from "./components/Sajek"; // Create or import this component
+import Carousel from "./components/Carousel"; 
+import CoxsBazar from "./components/CoxsBazar"; 
+import Shreemangal from "./components/Shreemangal"; 
+import Sundarban from "./components/Sundarban"; 
+import Sajek from "./components/Sajek"; 
 import Booking from './assets/Pages/Booking';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PopularDestinations from "./components/PopularDestinations";
 import FeaturedHotels from "./components/FeaturedHotels";
+import UserBookings from './assets/Pages/UserBookings';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/booking/:location/:destination" element={<Booking />} />
         <Route path="/popular-destinations" element={<PopularDestinations />} />
         <Route path="/featured-hotels" element={<FeaturedHotels />} />
+        <Route path="/my-bookings" element={<UserBookings />} />
       </Routes>
       <ToastContainer 
         position="top-right"

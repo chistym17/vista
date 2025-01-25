@@ -9,14 +9,16 @@ import CoxsBazar from "../Pages/CoxsBazar";
 import Shreemangal from "../Pages/Shreemangal";
 import Sundarban from "../Pages/Shundarban";
 import Sajek from "../Pages/Sajek";
-import Destinations from "../Pages/Destination"; // Import the Destinations component
-import Blog from "../Pages/Blog"; // Import Blog component
-import Contact from "../Pages/Contact"; // Import Contact component
+import Destinations from "../Pages/Destination"; 
+import Blog from "../Pages/Blog"; 
+import Contact from "../Pages/Contact"; 
 import Booking from '../Pages/Booking';
 import DestinationDetails from "../Pages/DestinationDetails";
 import HotelDetails from "../Pages/HotelDetails"; 
 import Payment from "../Pages/Payment";
 import BookingConfirmation from "../Pages/BookingConfirmation";
+import UserBookings from "../Pages/UserBookings";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -85,6 +87,10 @@ const router = createBrowserRouter([
       {
         path: "/booking-confirmation",
         element: <BookingConfirmation />,
+      },
+      {
+        path: "/my-bookings",
+        element: <UserBookings />
       },
     ],
   },
