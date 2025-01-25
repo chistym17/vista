@@ -23,38 +23,26 @@ const Booking = () => {
     e.preventDefault();
     
     try {
-      const bookingData = {
-        destination: destination.replace(/-/g, ' '),
-        checkIn: startDate.toISOString(),
-        checkOut: endDate.toISOString(),
-        guests: parseInt(formData.guests),
-        roomType: formData.roomType,
-        contactInfo: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone
-        }
-      };
-
-      const basePrice = 299;
-      const nights = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-      const totalAmount = basePrice * nights;
+      const totalNights = Math.ceil(
+        (endDate - startDate) / (1000 * 60 * 60 * 24)
+      );
 
       navigate('/payment', { 
         state: { 
           bookingDetails: {
-            destination: destination,
+            hotelName: 'Hotel Name Here',
+            destination: destination.replace(/-/g, ' '),
             checkIn: startDate.toLocaleDateString(),
             checkOut: endDate.toLocaleDateString(),
-            guests: bookingData.guests,
-            roomType: bookingData.roomType,
-            totalAmount: totalAmount,
-            name: bookingData.contactInfo.name,
-            email: bookingData.contactInfo.email,
-            phone: bookingData.contactInfo.phone,
-            // Pass the raw dates for API call after payment
             rawCheckIn: startDate.toISOString(),
-            rawCheckOut: endDate.toISOString()
+            rawCheckOut: endDate.toISOString(),
+            guests: parseInt(formData.guests),
+            roomType: formData.roomType,
+            totalAmount: 299 * totalNights,
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            totalNights: totalNights
           }
         }
       });

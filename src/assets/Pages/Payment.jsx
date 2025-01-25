@@ -43,22 +43,39 @@ export default function Payment() {
     setIsProcessing(true);
 
     try {
+      if (!bookingDetails) {
+        throw new Error('Booking details are missing');
+      }
+
       const bookingData = {
-        destination: bookingDetails.destination,
-        checkIn: bookingDetails.rawCheckIn,
-        checkOut: bookingDetails.rawCheckOut,
-        guests: bookingDetails.guests,
+        userId: auth.currentUser.uid,
+        userEmail: auth.currentUser.email,
+        destination: bookingDetails.hotelName || 'Default Hotel', // Add hotel name here
+        checkIn: bookingDetails.rawCheckIn || new Date(bookingDetails.checkIn).toISOString(),
+        checkOut: bookingDetails.rawCheckOut || new Date(bookingDetails.checkOut).toISOString(),
+        guests: Number(bookingDetails.guests),
         roomType: bookingDetails.roomType,
         contactInfo: {
-          name: bookingDetails.name,
-          email: bookingDetails.email,
-          phone: bookingDetails.phone
+          name: bookingDetails.name || 'John Doe',
+          email: bookingDetails.email || auth.currentUser.email,
+          phone: bookingDetails.phone || '+1234567890'
         },
-        totalAmount: bookingDetails.totalAmount,
-        paymentStatus: 'completed'
+        bookingDate: new Date().toISOString(),
+        status: "pending",
+        totalNights: Number(Math.ceil(
+          (new Date(bookingDetails.checkOut) - new Date(bookingDetails.checkIn)) / 
+          (1000 * 60 * 60 * 24)
+        ))
       };
 
-      const response = await fetch('http://localhost:8000/api/bookings', {
+      // Validate the data before sending
+      if (!bookingData.destination) {
+        throw new Error('Destination is required');
+      }
+
+      console.log('Sending booking data:', bookingData);
+
+      const response = await fetch('http://localhost:8000/api/bookings/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -67,10 +84,13 @@ export default function Payment() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create booking');
+        const errorData = await response.json();
+        console.error('API Error:', errorData);
+        throw new Error(errorData.detail || 'Failed to create booking');
       }
 
       const result = await response.json();
+      console.log('API Response:', result);
       
       setIsProcessing(false);
       toast.success('Payment successful! Booking confirmed.');
@@ -79,14 +99,14 @@ export default function Payment() {
         state: { 
           bookingDetails: {
             ...bookingDetails,
-            bookingId: result.bookingId
+            bookingId: result._id
           }
         }
       });
     } catch (error) {
       setIsProcessing(false);
-      console.error('Error:', error);
-      toast.error('Payment failed. Please try again.');
+      console.error('Booking error:', error);
+      toast.error(error.message || 'Payment failed. Please try again.');
     }
   };
 
