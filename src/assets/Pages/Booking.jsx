@@ -5,11 +5,13 @@ import { toast } from 'react-toastify';
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-toastify/dist/ReactToastify.css';
 import DarkNavbar from './DarkNavbar';
+import { getAuth } from 'firebase/auth';
 
 const Booking = () => {
   const { destination } = useParams();
   console.log(destination)
   const navigate = useNavigate();
+  const auth = getAuth();
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [formData, setFormData] = useState({
@@ -27,9 +29,15 @@ const Booking = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
+    if (!auth.currentUser) {
+      toast.error('Please login to complete your booking');
+      navigate('/login');
+      return;
+    }
+
     if (!startDate || !endDate) {
       toast.error('Please select check-in and check-out dates');
       return;
@@ -40,18 +48,72 @@ const Booking = () => {
       return;
     }
 
-    toast.success('Booking completed successfully!', {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
+    try {
+      // Prepare booking data
+      const bookingData = {
+        userId: auth.currentUser.uid,
+        userEmail: auth.currentUser.email,
+        destination: destination.replace(/-/g, ' '),
+        checkIn: startDate.toISOString(),
+        checkOut: endDate.toISOString(),
+        guests: formData.guests,
+        roomType: formData.roomType,
+        contactInfo: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone
+        },
+        bookingDate: new Date().toISOString(),
+        status: 'pending',
+        totalNights: Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24))
+      };
 
-    setTimeout(() => {
-      navigate('/');
-    }, 3000);
+      // Make API request to backend
+      const response = await fetch('http://localhost:5000/api/booking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await auth.currentUser.getIdToken()}`
+        },
+        body: JSON.stringify(bookingData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Booking failed');
+      }
+
+      const result = await response.json();
+
+      // Show success message
+      toast.success('Booking completed successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
+      // Navigate to payment with booking details
+      navigate('/payment', { 
+        state: { 
+          bookingDetails: {
+            bookingId: result.bookingId,
+            destination: destination,
+            checkIn: startDate.toLocaleDateString(),
+            checkOut: endDate.toLocaleDateString(),
+            guests: formData.guests,
+            roomType: formData.roomType,
+            totalAmount: result.totalAmount || 299, // Use the amount from backend or fallback
+            name: formData.name,
+            email: formData.email
+          }
+        }
+      });
+    } catch (error) {
+      console.error('Booking error:', error);
+      toast.error('Failed to complete booking. Please try again.');
+    }
   };
 
   return (
