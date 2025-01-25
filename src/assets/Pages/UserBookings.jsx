@@ -26,18 +26,10 @@ const UserBookings = () => {
       }
       
       const data = await response.json();
-      console.log('Fetched bookings:', data); // Debug log
-      
-      // Keep the original _id from MongoDB
-      const transformedData = data.map(booking => ({
-        ...booking,
-        id: booking.id // Store MongoDB's _id in id field
-      }));
-      
-      setBookings(transformedData);
+      setBookings(data);
       
       // Calculate total amount
-      const total = transformedData.reduce((sum, booking) => sum + (booking.totalAmount || 0), 0);
+      const total = data.reduce((sum, booking) => sum + (booking.totalAmount || 0), 0);
       setTotalAmount(total);
     } catch (error) {
       console.error('Error fetching bookings:', error);
@@ -48,7 +40,6 @@ const UserBookings = () => {
   };
 
   const handleDeleteBooking = async (bookingId) => {
-    console.log('Attempting to delete booking:', bookingId); // Debug log
     
     if (!bookingId) {
       console.error('Invalid booking ID');
@@ -56,7 +47,7 @@ const UserBookings = () => {
       return;
     }
 
-    if (!window.confirm('Are you sure you want to cancel this booking?')) return;
+    
 
     try {
       const response = await fetch(`http://localhost:8000/api/bookings/${bookingId}`, {
@@ -68,12 +59,10 @@ const UserBookings = () => {
         throw new Error(errorData.detail || 'Failed to delete booking');
       }
 
-      // Remove booking from state
-      setBookings(prevBookings => prevBookings.filter(booking => booking._id !== bookingId));
+      setBookings(prevBookings => prevBookings.filter(booking => booking.id !== bookingId));
       toast.success('Booking cancelled successfully');
       
-      // Update total amount
-      const deletedBooking = bookings.find(b => b._id === bookingId);
+      const deletedBooking = bookings.find(b => b.id === bookingId);
       if (deletedBooking) {
         setTotalAmount(prev => prev - (deletedBooking.totalAmount || 0));
       }
@@ -95,7 +84,6 @@ const UserBookings = () => {
     <div className="min-h-screen bg-gray-100">
       <DarkNavbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        {/* User Summary Card */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="flex items-center space-x-4">
             {user.photoURL ? (
@@ -113,7 +101,6 @@ const UserBookings = () => {
             </div>
           </div>
           
-          {/* Summary Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             <div className="bg-gray-50 rounded-lg p-4">
               <div className="flex items-center justify-between">
@@ -147,7 +134,6 @@ const UserBookings = () => {
           </div>
         </div>
 
-        {/* Bookings List */}
         <div className="space-y-6">
           {bookings.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-xl shadow">
