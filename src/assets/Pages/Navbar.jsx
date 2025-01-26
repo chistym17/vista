@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../image.png"; 
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -9,6 +9,20 @@ import { FaUser, FaSignOutAlt, FaRegBell, FaCalendarAlt } from 'react-icons/fa';
 const Navbar = () => {
   const [user] = useAuthState(auth);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowProfileMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = () => {
     signOut(auth)
@@ -26,7 +40,6 @@ const Navbar = () => {
         <img src={logo} alt="Travel Guru" className="h-10 lg:h-12" />{" "}
       </div>
       <div className="flex items-center space-x-4 lg:space-x-6">
-      
         <NavLink
           to="/blog"
           className="text-white text-xs lg:text-sm"
@@ -41,8 +54,18 @@ const Navbar = () => {
         >
           Contact
         </NavLink>
+        {user && (
+          <NavLink
+            to="/my-bookings"
+            className="flex items-center text-white text-xs lg:text-sm space-x-1"
+            activeClassName="font-bold"
+          >
+            <FaCalendarAlt className="text-xs lg:text-sm" />
+            <span>My Bookings</span>
+          </NavLink>
+        )}
         {user ? (
-          <div className="relative">
+          <div className="relative" ref={menuRef}>
             <div 
               className="flex items-center space-x-3 bg-white/10 backdrop-blur-md rounded-full px-4 py-2 cursor-pointer hover:bg-white/20 transition-all duration-300"
               onClick={() => setShowProfileMenu(!showProfileMenu)}
@@ -77,20 +100,6 @@ const Navbar = () => {
                 </div>
 
                 <div className="py-1">
-                  <a
-                    href="#profile"
-                    className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-150"
-                  >
-                    <FaUser className="mr-3 text-gray-500" />
-                    Your Profile
-                  </a>
-                  <a
-                    href="#notifications"
-                    className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-150"
-                  >
-                    <FaRegBell className="mr-3 text-gray-500" />
-                    Notifications
-                  </a>
                   <NavLink
                     to="/my-bookings"
                     className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-150"
