@@ -10,6 +10,8 @@ const UserBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [bookingToDelete, setBookingToDelete] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -24,11 +26,10 @@ const UserBookings = () => {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Failed to fetch bookings');
       }
-      
+
       const data = await response.json();
       setBookings(data);
-      
-      // Calculate total amount
+
       const total = data.reduce((sum, booking) => sum + (booking.totalAmount || 0), 0);
       setTotalAmount(total);
     } catch (error) {
@@ -40,14 +41,14 @@ const UserBookings = () => {
   };
 
   const handleDeleteBooking = async (bookingId) => {
-    
+
     if (!bookingId) {
       console.error('Invalid booking ID');
       toast.error('Invalid booking ID');
       return;
     }
 
-    
+
 
     try {
       const response = await fetch(`http://localhost:8000/api/bookings/${bookingId}`, {
@@ -61,7 +62,7 @@ const UserBookings = () => {
 
       setBookings(prevBookings => prevBookings.filter(booking => booking.id !== bookingId));
       toast.success('Booking cancelled successfully');
-      
+
       const deletedBooking = bookings.find(b => b.id === bookingId);
       if (deletedBooking) {
         setTotalAmount(prev => prev - (deletedBooking.totalAmount || 0));
@@ -70,6 +71,22 @@ const UserBookings = () => {
       console.error('Error deleting booking:', error);
       toast.error(error.message || 'Failed to cancel booking');
     }
+  };
+
+  const handleDeleteClick = (booking) => {
+    setBookingToDelete(booking);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = () => {
+    handleDeleteBooking(bookingToDelete?.id);
+    setShowDeleteModal(false);
+    setBookingToDelete(null);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setBookingToDelete(null);
   };
 
   if (loading) {
@@ -83,6 +100,32 @@ const UserBookings = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <DarkNavbar />
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
+            <h3 className="text-xl font-bold text-gray-900 mb-3">Confirm Cancellation</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Are you sure you want to cancel your booking for{' '}
+              <span className="font-semibold">{bookingToDelete?.destination}</span>?
+              This action cannot be undone.
+            </p>
+            <div className="flex space-x-3">
+              <button
+                onClick={confirmDelete}
+                className="flex-1 bg-red-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200"
+              >
+                Yes, Cancel Booking
+              </button>
+              <button
+                onClick={cancelDelete}
+                className="flex-1 bg-gray-200 text-gray-800 text-sm px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-200"
+              >
+                No, Keep Booking
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="flex items-center space-x-4">
@@ -100,7 +143,7 @@ const UserBookings = () => {
               <p className="text-gray-500">{user.email}</p>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             <div className="bg-gray-50 rounded-lg p-4">
               <div className="flex items-center justify-between">
@@ -173,7 +216,7 @@ const UserBookings = () => {
                         {booking.totalNights} nights
                       </p>
                       <button
-                        onClick={() => handleDeleteBooking(booking?.id)}
+                        onClick={() => handleDeleteClick(booking)}
                         className="mt-4 flex items-center justify-center px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors duration-200"
                       >
                         <FaTrash className="mr-2" />
@@ -182,13 +225,12 @@ const UserBookings = () => {
                     </div>
                   </div>
                 </div>
-                <div className={`px-6 py-3 ${
-                  new Date(booking.checkOut) < new Date() 
+                <div className={`px-6 py-3 ${new Date(booking.checkOut) < new Date()
                     ? 'bg-gray-100 text-gray-600'
                     : 'bg-green-50 text-green-600'
-                }`}>
+                  }`}>
                   <p className="text-sm font-medium">
-                    {new Date(booking.checkOut) < new Date() 
+                    {new Date(booking.checkOut) < new Date()
                       ? 'Completed'
                       : 'Active Booking'}
                   </p>
