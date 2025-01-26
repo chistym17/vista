@@ -1,7 +1,7 @@
 // src/Pages/BookingConfirmation.jsx
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { FaCheckCircle, FaHotel, FaCalendar, FaUsers, FaCreditCard } from 'react-icons/fa';
+import { FaCheckCircle, FaHotel, FaCalendar, FaUsers, FaCreditCard, FaCalendarAlt } from 'react-icons/fa';
 
 export default function BookingConfirmation() {
   const location = useLocation();
@@ -84,18 +84,26 @@ export default function BookingConfirmation() {
           </div>
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
               onClick={() => navigate('/')}
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 
-                transition-colors font-semibold text-center"
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 
+                transition-colors font-medium text-sm text-center"
             >
               Return to Home
             </button>
             <button
+              onClick={() => navigate('/my-bookings')}
+              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 
+                transition-colors font-medium text-sm text-center flex items-center justify-center"
+            >
+              <FaCalendarAlt className="mr-2" />
+              Show My Bookings
+            </button>
+            <button
               onClick={() => window.print()}
-              className="bg-gray-100 text-gray-700 px-8 py-3 rounded-lg hover:bg-gray-200 
-                transition-colors font-semibold text-center"
+              className="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 
+                transition-colors font-medium text-sm text-center"
             >
               Print Confirmation
             </button>
