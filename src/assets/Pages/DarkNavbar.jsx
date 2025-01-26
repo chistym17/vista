@@ -41,6 +41,16 @@ const DarkNavbar = () => {
 
       <div className="flex items-center space-x-4 lg:space-x-6">
         <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `text-gray-100 hover:text-white text-xs lg:text-sm transition-colors duration-200 ${
+              isActive ? 'font-semibold' : ''
+            }`
+          }
+        >
+          Home
+        </NavLink>
+        <NavLink
           to="/blog"
           className={({ isActive }) =>
             `text-gray-100 hover:text-white text-xs lg:text-sm transition-colors duration-200 ${
@@ -49,16 +59,6 @@ const DarkNavbar = () => {
           }
         >
           Blog
-        </NavLink>
-        <NavLink
-          to="/contact"
-          className={({ isActive }) =>
-            `text-gray-100 hover:text-white text-xs lg:text-sm transition-colors duration-200 ${
-              isActive ? 'font-semibold' : ''
-            }`
-          }
-        >
-          Contact
         </NavLink>
         {user && (
           <NavLink
