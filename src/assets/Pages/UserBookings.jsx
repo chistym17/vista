@@ -21,7 +21,7 @@ const UserBookings = () => {
 
   const fetchUserBookings = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/bookings/user/${user.uid}`);
+      const response = await fetch(`https://vista-backend-reqg.onrender.com/api/bookings/user/${user.uid}`);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Failed to fetch bookings');
@@ -51,7 +51,7 @@ const UserBookings = () => {
 
 
     try {
-      const response = await fetch(`http://localhost:8000/api/bookings/${bookingId}`, {
+      const response = await fetch(`https://vista-backend-reqg.onrender.com/api/bookings/${bookingId}`, {
         method: 'DELETE'
       });
 
@@ -226,8 +226,8 @@ const UserBookings = () => {
                   </div>
                 </div>
                 <div className={`px-6 py-3 ${new Date(booking.checkOut) < new Date()
-                    ? 'bg-gray-100 text-gray-600'
-                    : 'bg-green-50 text-green-600'
+                  ? 'bg-gray-100 text-gray-600'
+                  : 'bg-green-50 text-green-600'
                   }`}>
                   <p className="text-sm font-medium">
                     {new Date(booking.checkOut) < new Date()

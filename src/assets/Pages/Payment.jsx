@@ -25,10 +25,10 @@ export default function Payment() {
   useEffect(() => {
     if (!auth.currentUser) {
       toast.error('Please login or register to complete your booking');
-      navigate('/register', { 
-        state: { 
+      navigate('/register', {
+        state: {
           redirectUrl: '/payment',
-          bookingDetails: bookingDetails 
+          bookingDetails: bookingDetails
         }
       });
       return;
@@ -63,7 +63,7 @@ export default function Payment() {
         bookingDate: new Date().toISOString(),
         status: "pending",
         totalNights: Number(Math.ceil(
-          (new Date(bookingDetails.checkOut) - new Date(bookingDetails.checkIn)) / 
+          (new Date(bookingDetails.checkOut) - new Date(bookingDetails.checkIn)) /
           (1000 * 60 * 60 * 24)
         ))
       };
@@ -74,7 +74,7 @@ export default function Payment() {
 
       console.log('Sending booking data:', bookingData);
 
-      const response = await fetch('http://localhost:8000/api/bookings/', {
+      const response = await fetch('https://vista-backend-reqg.onrender.com/api/bookings/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -90,12 +90,12 @@ export default function Payment() {
 
       const result = await response.json();
       console.log('API Response:', result);
-      
+
       setIsProcessing(false);
       toast.success('Payment successful! Booking confirmed.');
-      
-      navigate('/booking-confirmation', { 
-        state: { 
+
+      navigate('/booking-confirmation', {
+        state: {
           bookingDetails: {
             ...bookingDetails,
             bookingId: result._id,
@@ -117,9 +117,9 @@ export default function Payment() {
       <div className="mb-8 bg-white rounded-xl shadow-lg p-6 transform hover:scale-[1.02] transition-all duration-300">
         <div className="flex items-center space-x-4">
           {auth.currentUser.photoURL ? (
-            <img 
-              src={auth.currentUser.photoURL} 
-              alt="Profile" 
+            <img
+              src={auth.currentUser.photoURL}
+              alt="Profile"
               className="w-16 h-16 rounded-full border-4 border-blue-100"
             />
           ) : (
@@ -181,7 +181,7 @@ export default function Payment() {
           {/* Left Column - User Profile */}
           <div className="lg:w-1/3">
             <UserProfileBox />
-            
+
             {/* Booking Summary */}
             <div className="mt-6 bg-white rounded-xl shadow-lg p-6">
               <h3 className="text-lg font-semibold text-gray-800 mb-4">
