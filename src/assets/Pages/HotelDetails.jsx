@@ -1,8 +1,9 @@
-// src/Pages/HotelDetails.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaStar, FaWifi, FaParking, FaSwimmingPool, FaCoffee, FaMapMarkerAlt, FaUtensils, FaGlassMartini, FaSpa, FaConciergeBell, FaUmbrella } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import OptimizedImage from '../../components/OptimizedImage';
+import PriorityImage from '../../components/PriorityImage';
 
 const hotelsData = [
   {
@@ -402,11 +403,14 @@ export default function HotelDetails() {
       <div className="relative h-[70vh]">
         <div 
           className="absolute inset-0 bg-center bg-cover bg-fixed"
-          style={{ 
-            backgroundImage: `url(${hotel.image})`,
-            transform: 'scale(1.1)'
-          }}
-        />
+          style={{ transform: 'scale(1.1)' }}
+        >
+          <PriorityImage
+            src={hotel.image}
+            alt={hotel.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
         <div className="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-4">
@@ -433,7 +437,7 @@ export default function HotelDetails() {
         <div className="grid grid-cols-3 gap-4 mb-12">
           {hotel.galleryImages.map((img, index) => (
             <div key={index} className="overflow-hidden rounded-lg shadow-lg group">
-              <img 
+              <OptimizedImage 
                 src={img}
                 alt={`${hotel.name} gallery ${index + 1}`}
                 className="h-64 w-full object-cover transform transition-transform duration-500 group-hover:scale-110"

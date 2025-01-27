@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaMapMarkerAlt, FaStar, FaRegClock, FaUmbrella, FaCamera, FaHotel, FaPlane, FaCalendar, FaUsers, FaSun, FaCheckCircle, FaInfoCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import OptimizedImage from '../../components/OptimizedImage';
+import PriorityImage from '../../components/PriorityImage';
 
 const destinationsData = [
   {
@@ -216,11 +218,14 @@ export default function DestinationDetails() {
       <div className="relative h-[70vh] overflow-hidden">
         <div 
           className="absolute inset-0 bg-center bg-cover bg-fixed"
-          style={{ 
-            backgroundImage: `url(${destination.image})`,
-            transform: 'scale(1.1)'
-          }}
-        />
+          style={{ transform: 'scale(1.1)' }}
+        >
+          <PriorityImage
+            src={destination.image}
+            alt={destination.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
         <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-4">
@@ -268,7 +273,7 @@ export default function DestinationDetails() {
               <h2 className="text-3xl font-bold mb-6">Gallery</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {destination.galleryImages.map((img, index) => (
-                  <img 
+                  <OptimizedImage 
                     key={index}
                     src={img}
                     alt={`${destination.name} gallery ${index + 1}`}
