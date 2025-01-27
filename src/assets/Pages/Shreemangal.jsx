@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import DarkNavbar from "./DarkNavbar";
+import OptimizedImage from '../../components/OptimizedImage';
 import image1 from "../images/shreemangal1.jpg";
 import image2 from "../images/shreemangal2.jpg";
 import image3 from "../images/shreemangal3.jpg";
@@ -93,7 +94,7 @@ const Shreemangal = () => {
                 key={index}
                 className="bg-white shadow-lg rounded-lg overflow-hidden"
               >
-                <img
+                <OptimizedImage
                   src={card.image}
                   alt={card.title}
                   className="w-full h-48 sm:h-56 object-cover"
@@ -123,7 +124,7 @@ const Shreemangal = () => {
                   key={index}
                   className="bg-white shadow-lg rounded-lg overflow-hidden"
                 >
-                  <img
+                  <OptimizedImage
                     src={food.image}
                     alt={food.name}
                     className="w-full h-48 sm:h-56 object-cover"

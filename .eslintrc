@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "jsx-a11y/alt-text": "error",
+    "jsx-a11y/img-redundant-alt": "error"
+  }
+} 

@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import DarkNavbar from "./DarkNavbar";
+import OptimizedImage from '../../components/OptimizedImage';
 import image1 from "../images/sajek1.jpg";
 import image2 from "../images/sajek2.jpg";
 import image3 from "../images/sajek3.jpg";
@@ -94,7 +95,7 @@ const Sajek = () => {
                 key={index}
                 className="bg-white shadow-xl rounded-lg overflow-hidden transform transition-transform hover:scale-105 hover:shadow-2xl flex flex-col"
               >
-                <img
+                <OptimizedImage
                   src={card.image}
                   alt={card.title}
                   className="w-full h-40 sm:h-48 lg:h-64 object-cover"
@@ -129,7 +130,7 @@ const Sajek = () => {
                   key={index}
                   className="bg-white shadow-lg rounded-lg overflow-hidden"
                 >
-                  <img
+                  <OptimizedImage
                     src={food.image}
                     alt={food.name}
                     className="w-full h-48 sm:h-56 object-cover"
