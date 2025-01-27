@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import DarkNavbar from "./DarkNavbar";
+import OptimizedImage from '../../components/OptimizedImage';
 import image1 from "../images/coxs1.jpg";
 import image2 from "../images/coxs2.jpg";
 import image3 from "../images/coxs3.jpg";
@@ -75,7 +76,7 @@ const CoxsBazar = () => {
   return (
     <div
       style={{
-        backgroundColor: "#ffe4b5",
+        backgroundColor: "#e3f2fd",
         minHeight: "100vh",
         fontFamily: "mons",
       }}
@@ -92,7 +93,7 @@ const CoxsBazar = () => {
                 key={index}
                 className="bg-white shadow-xl rounded-lg overflow-hidden transform transition-transform hover:scale-105 hover:shadow-2xl flex flex-col"
               >
-                <img
+                <OptimizedImage
                   src={card.image}
                   alt={card.title}
                   className="w-full h-40 sm:h-48 lg:h-64 object-cover"
@@ -107,38 +108,39 @@ const CoxsBazar = () => {
                     </p>
                   </div>
                   <button
-                    className="bg-gradient-to-r from-orange-400 to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white py-2 px-3 sm:px-4 rounded font-mons transition-colors mt-4"
+                    className="bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white py-2 px-3 sm:px-4 rounded font-mons transition-colors mt-4"
                     onClick={() => handleBooking(card.path)}
                   >
-                    Book Now
+                    Start Booking
                   </button>
                 </div>
               </div>
             ))}
           </div>
-          <div className="bg-white shadow-xl rounded-lg p-4 sm:p-6 flex flex-col justify-between">
-            <h2 className="text-2xl sm:text-3xl font-semibold mb-4 sm:mb-6 font-bebo text-center text-gray-800">
+          <div className="space-y-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 font-bebo">
               Must-Try Foods
             </h2>
-            <ul className="space-y-6 sm:space-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-1 gap-6">
               {foods.map((food, index) => (
-                <li key={index} className="flex flex-col items-center">
-                  <img
+                <div
+                  key={index}
+                  className="bg-white shadow-lg rounded-lg overflow-hidden"
+                >
+                  <OptimizedImage
                     src={food.image}
                     alt={food.name}
-                    className="w-24 h-24 sm:w-32 sm:h-32 lg:w-48 lg:h-48 object-cover rounded-lg shadow-lg mb-3 sm:mb-4"
+                    className="w-full h-48 sm:h-56 object-cover"
                   />
-                  <div className="text-center">
-                    <h3 className="text-md sm:text-lg font-bebo text-gray-900">
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-2 text-gray-800">
                       {food.name}
                     </h3>
-                    <p className="text-xs sm:text-sm lg:text-base font-mons text-gray-700">
-                      {food.description}
-                    </p>
+                    <p className="text-gray-600">{food.description}</p>
                   </div>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
       </div>

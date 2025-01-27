@@ -1,6 +1,7 @@
 // src/Pages/Blog.jsx
 import React from "react";
 import { FaCalendarAlt, FaLink, FaUser, FaComments, FaHeart } from "react-icons/fa";
+import OptimizedImage from '../../components/OptimizedImage';
 
 const Blog = () => {
   const blogPosts = [
@@ -63,7 +64,7 @@ const Blog = () => {
             >
               {/* Image Container */}
               <div className="relative h-64 overflow-hidden">
-                <img
+                <OptimizedImage
                   src={post.image}
                   alt={post.title}
                   className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
